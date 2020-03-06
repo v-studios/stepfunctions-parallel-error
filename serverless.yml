@@ -1,0 +1,66 @@
+service: parallelerrors
+
+plugins:
+  - serverless-step-functions
+  # - serverless-pseudo-parameters
+  # - serverless-stack-output
+
+# custom:
+  # output:                       # Plugin: serverless-stack-output
+  #   file: serverless-stack-output.json # toml, yaml, yml, json
+
+package:
+  individually: true
+  exclude:
+    - "**"                      # all files and directories
+
+provider:
+  name: aws
+  runtime: python3.8
+  logRetentionInDays: 30        # dont create infinite logs as they cost money
+
+functions:
+  Pho:
+    handler: handler.pho
+    package:
+      include:
+        - handler.py
+  BahnMi:
+    handler: handler.bahnmi
+    package:
+      include:
+        - handler.py
+
+
+stepFunctions:
+  stateMachines:
+    ParallelError:
+      name: ParallelError
+      definition:
+        StartAt: Start
+        States:
+          Start:
+            Type: Pass
+            Next: Parallelize
+          Parallelize:
+            Type: Parallel
+            Next: Done
+            Branches:
+              - StartAt: Json
+                States:
+                  Json:
+                    Type: Pass
+                    End: true
+              - StartAt: Pdf
+                States:
+                  Pdf:
+                    Type: Pass
+                    End: true
+                    # Resour:ce:
+                      #   Fn::GetAtt: [Pho, Arn]
+          Done:
+            Type: Pass
+            End: true
+
+                
+  

@@ -1,0 +1,17 @@
+{
+  "name": "parallel_errors",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serverless": "^1.65.0",
+    "serverless-pseudo-parameters": "^2.5.0",
+    "serverless-stack-output": "^0.2.3",
+    "serverless-step-functions": "^2.17.2"
+  }
+}
