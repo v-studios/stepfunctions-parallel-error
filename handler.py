@@ -1,24 +1,29 @@
 import json
+from random import randint
 
 
-def hello(event, context):
-    body = {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "input": event
-    }
+class UserError(Exception):
+    pass
 
-    response = {
-        "statusCode": 200,
-        "body": json.dumps(body)
-    }
 
-    return response
+def error_system(event, context):
+    print('ERROR SYSTEM')
 
-    # Use this code if you don't use the http event with the LAMBDA-PROXY
-    # integration
-    """
-    return {
-        "message": "Go Serverless v1.0! Your function executed successfully!",
-        "event": event
-    }
-    """
+
+def error_user(event, context):
+    print('ERROR USER')
+
+
+
+def json(event, context):
+    if randint(1, 3) == 1:
+        raise UserError('JSON USER')
+    if randint(1, 3) == 1:
+        raise SystemError('JSON SYSTEM')
+
+
+def pdf(event, context):
+    if randint(1, 3) == 1:
+        raise UserError('PDF USER')
+    if randint(1, 3) == 1:
+        raise SystemError('PDF SYSTEM')

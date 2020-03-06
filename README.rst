@@ -2,7 +2,15 @@
  README Parallel Error
 =======================
 
-We want a Parallel task to wrap two functions.  If either one of them
-raises an UserException, we should trap it OUTSIDE of the Parallel
-task and send it to a Failed terminal state. If they both succeed, we
-go to a Happy terminal state.
+Demonstration.
+
+We want a Parallel task to wrap two functions, one that computes Json
+output, the other cmoputes PDF output.
+
+If they both suceed, we go to the successful Done state.
+
+If either raises an UserException or SystemException, we should trap
+it OUTSIDE of the Parallel task and send it to the corred failure
+processor, which both then flow to a DoneError terminal failure state.
+
+.. image:: parallelerror.png

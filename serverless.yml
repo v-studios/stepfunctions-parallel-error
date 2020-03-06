@@ -20,13 +20,23 @@ provider:
   logRetentionInDays: 30        # dont create infinite logs as they cost money
 
 functions:
-  Pho:
-    handler: handler.pho
+  Json:
+    handler: handler.json
     package:
       include:
         - handler.py
-  BahnMi:
-    handler: handler.bahnmi
+  Pdf:
+    handler: handler.pdf
+    package:
+      include:
+        - handler.py
+  HandleErrorSystem:
+    handler: handler.error_system
+    package:
+      include:
+        - handler.py
+  HandleErrorUser:
+    handler: handler.error_user
     package:
       include:
         - handler.py
@@ -45,22 +55,39 @@ stepFunctions:
           Parallelize:
             Type: Parallel
             Next: Done
+            Catch:
+            - ErrorEquals: ["UserError"]
+              ResultPath: $.error
+              Next: HandleErrorUser
+            - ErrorEquals: ["SystemError"]
+              ResultPath: $.error
+              Next: HandleErrorSystem
             Branches:
               - StartAt: Json
                 States:
                   Json:
-                    Type: Pass
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [Pdf, Arn]
                     End: true
               - StartAt: Pdf
                 States:
                   Pdf:
-                    Type: Pass
+                    Type: Task
+                    Resource:
+                      Fn::GetAtt: [Json, Arn]
                     End: true
-                    # Resour:ce:
-                      #   Fn::GetAtt: [Pho, Arn]
           Done:
             Type: Pass
             End: true
-
+          HandleErrorSystem:
+            Type: Pass
+            Next: DoneError
+          HandleErrorUser:
+            Type: Pass
+            Next: DoneError
+          DoneError:
+            Type: Fail
+            Cause: Error Occurred
                 
   
