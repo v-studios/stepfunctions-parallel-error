@@ -2,22 +2,16 @@ service: parallelerrors
 
 plugins:
   - serverless-step-functions
-  # - serverless-pseudo-parameters
-  # - serverless-stack-output
-
-# custom:
-  # output:                       # Plugin: serverless-stack-output
-  #   file: serverless-stack-output.json # toml, yaml, yml, json
 
 package:
   individually: true
   exclude:
-    - "**"                      # all files and directories
+    - "**"                    # all files and directories
 
 provider:
   name: aws
   runtime: python3.8
-  logRetentionInDays: 30        # dont create infinite logs as they cost money
+  logRetentionInDays: 30      # do not create infinite logs as they cost money
 
 functions:
   Json:
@@ -40,7 +34,6 @@ functions:
     package:
       include:
         - handler.py
-
 
 stepFunctions:
   stateMachines:
@@ -89,5 +82,3 @@ stepFunctions:
           DoneError:
             Type: Fail
             Cause: Error Occurred
-                
-  

@@ -1,4 +1,3 @@
-import json
 from random import randint
 
 
@@ -14,16 +13,15 @@ def error_user(event, context):
     print('ERROR USER')
 
 
-
 def json(event, context):
-    if randint(1, 3) == 1:
+    if randint(1, 4) == 1:
         raise UserError('JSON USER')
-    if randint(1, 3) == 1:
+    if randint(1, 4) == 1:
         raise SystemError('JSON SYSTEM')
 
 
 def pdf(event, context):
-    if randint(1, 3) == 1:
+    if randint(1, 4) == 1:
         raise UserError('PDF USER')
-    if randint(1, 3) == 1:
+    if randint(1, 4) == 1:
         raise SystemError('PDF SYSTEM')
